@@ -10,41 +10,7 @@ const { installedSdks } = InstalledData.data;
  */
 const Installed = () => {
   const newInstalledSdks = orderBy(installedSdks, "categories", "asc"); //instaslledSdk orderBy lodash
-
-  //Handling categories by group and map through the installedSdklist
-  const renderData = () => {
-    const data = groupBy(newInstalledSdks, "categories");
-    return Object.keys(data).map((category) => (
-      <React.Fragment key={category}>
-        <Box
-          sx={{
-            marginTop: "20px",
-            color: "#42a5f5",
-          }}
-        >
-          <Typography variant="h6" sx={{ textDecoration: "underline" }}>
-            {category}
-          </Typography>
-
-          {data[category].map((order, i) => {
-            const { lastSeenDate, name } = order;
-            //Used moment to get currentDate and lastSeenDate
-            const currentDate = moment(new Date());
-            const lastSeenInstalledDate = moment(lastSeenDate);
-            return (
-              <Typography key={i}>
-                {name}{" "}
-                {`${Math.floor(
-                  currentDate.diff(lastSeenInstalledDate, "years", true)
-                )} years ago`}
-              </Typography>
-            );
-          })}
-        </Box>
-      </React.Fragment>
-    ));
-  };
-
+  const data = groupBy(newInstalledSdks, "categories"); //instaslledSdk groupBy lodash
   return (
     <Card
       sx={{
@@ -83,8 +49,38 @@ const Installed = () => {
           color="#42a5f5"
         ></Typography>
 
-        {/* Call renderData to display installedSdk's list */}
-        <Box>{renderData()}</Box>
+        {/*   Map through the installedSdklist */}
+        <Box>
+          {Object.keys(data).map((category) => (
+            <React.Fragment key={category}>
+              <Box
+                sx={{
+                  marginTop: "20px",
+                  color: "#42a5f5",
+                }}
+              >
+                <Typography variant="h6" sx={{ textDecoration: "underline" }}>
+                  {category}
+                </Typography>
+
+                {data[category].map((order, i) => {
+                  const { lastSeenDate, name } = order;
+                  //Used moment to get currentDate and lastSeenDate
+                  const currentDate = moment(new Date());
+                  const lastSeenInstalledDate = moment(lastSeenDate);
+                  return (
+                    <Typography key={i}>
+                      {name}{" "}
+                      {`${Math.floor(
+                        currentDate.diff(lastSeenInstalledDate, "years", true)
+                      )} years ago`}
+                    </Typography>
+                  );
+                })}
+              </Box>
+            </React.Fragment>
+          ))}
+        </Box>
       </CardContent>
       <CardActions></CardActions>
     </Card>
